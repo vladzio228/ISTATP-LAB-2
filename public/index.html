@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="./kit/css/uikit.min.css" />
+    <script src="./kit/js/uikit.min.js"></script>
+    <script src="./kit/js/uikit-icons.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Start page</title>
+  </head>
+  <body>
+    <div class="uk-flex uk-flex-center">
+      <div>
+        <main class="uk-padding-large">
+          <section
+            class="uk-width-1-1 uk-grid-margin uk-first-column"
+            style="width: 500px"
+          >
+            <h1 class="uk-text-center uk-padding-large">
+              All articles
+            </h1>
+            <h2 class="uk-text-center">
+              <a href="change.html">Change</a>
+            </h2>
+            <h2 class="uk-text-center">
+              <a href="create.html">Create</a>
+            </h2>
+            <form>
+              <div
+                class="uk-grid-small uk-child-width-1-1 uk-grid uk-grid-stack"
+                uk-grid=""
+              >
+                <div class="uk-first-column" id="articles"></div>
+              </div>
+            </form>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      const getArticles = async () => {
+        try {
+          const res = await axios({
+            method: 'GET',
+            url: '/api/v1/articles/',
+          })
+            .then((result) => {
+              const docArticles = document.getElementById('articles');
+              const articles = result.data.data.data;
+              for (i of articles) {
+                console.log(i);
+                docArticles.innerHTML += `<div class = "uk-padding-large uk-box-shadow-large"
+                    ><div
+                      class=" uk-text-center  "
+                    >
+                      <h5><b>Header of article: ${i.header}</b></h5>
+                    </div>
+                    <div
+                      class=" uk-text-center uk-padding-small"
+                    >
+                      <h6><b>Text of article: ${i.text}</b></h6>
+                    </div>
+                    <div
+                      class="uk-form-label uk-form-label-required uk-text-center uk-padding-remove"
+                    >
+                    Id of article: ${i._id}
+                    </div>
+                  </div>`;
+              }
+            })
+            .catch((e) => alert('Bad values'));
+          return false;
+        } catch (err) {
+          alert(err);
+          return false;
+        }
+      };
+      getArticles();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="./kit/css/uikit.min.css" />
+    <script src="./kit/js/uikit.min.js"></script>
+    <script src="./kit/js/uikit-icons.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="uk-flex uk-flex-center">
+      <div>
+        <main class="uk-padding-large">
+          <section
+            class="uk-width-1-1 uk-grid-margin uk-first-column"
+            style="width: 500px"
+          >
+            <h1 class="uk-text-center uk-padding-large">
+              Update article
+            </h1>
+            <form>
+              <div
+                class="uk-grid-small uk-child-width-1-1 uk-grid uk-grid-stack"
+                uk-grid=""
+              >
+                <div class="uk-first-column">
+                  <label
+                    ><div
+                      class="uk-form-label uk-form-label-required uk-text-center"
+                    >
+                      <h4><b>Id of article</b></h4>
+                    </div>
+                    <input
+                      placeholder="Id"
+                      class="uk-input"
+                      type="text"
+                      required=""
+                      id="id"
+                    />
+                  </label>
+                  <label
+                    ><div
+                      class="uk-form-label uk-form-label-required uk-text-center"
+                    >
+                      <h4><b>Header of article</b></h4>
+                    </div>
+                    <input
+                      placeholder="Header"
+                      class="uk-input"
+                      type="text"
+                      required=""
+                      id="header"
+                  /></label>
+                  <label
+                    ><div
+                      class="uk-form-label uk-form-label-required uk-text-center"
+                    >
+                      <h4><b>Text of article</b></h4>
+                      <textarea
+                        class="uk-textarea"
+                        rows="8"
+                        placeholder="Textarea"
+                        id="text"
+                      ></textarea>
+                    </div>
+                  </label>
+                  <div class="uk-text-center">
+                    <button
+                      type="button"
+                      class="uk-button uk-button-default"
+                      onclick="getArticle()"
+                    >
+                      Get
+                    </button>
+                    <button
+                      type="button"
+                      class="uk-button uk-button-default"
+                      onclick="deleteArticle()"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      type="button"
+                      class="uk-button uk-button-default"
+                      onclick="sendArticle()"
+                    >
+                      Send
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      let globalId = '';
+      const sendArticle = async () => {
+        try {
+          const header = document.getElementById('header').value;
+          const text = document.getElementById('text').value;
+          if (!header || !text) {
+            alert('some field is empty');
+            return false;
+          }
+          const res = await axios({
+            method: 'PATCH',
+            url: '/api/v1/articles/' + globalId,
+            data: {
+              header: header,
+              text: text,
+            },
+          })
+            .then((result) => {
+              console.log(result);
+              alert('success');
+            })
+            .catch((e) => alert('Bad values'));
+          return false;
+        } catch (err) {
+          alert(err);
+          return false;
+        }
+      };
+    </script>
+    <script>
+      const deleteArticle = async () => {
+        try {
+          const id = document.getElementById('id').value;
+
+          const res = await axios({
+            method: 'DELETE',
+            url: '/api/v1/articles/' + id,
+            data: {
+              header: header,
+              text: text,
+            },
+          })
+            .then((result) => {
+              console.log(result);
+              alert('success');
+            })
+            .catch((e) => alert('Bad id'));
+
+          return false;
+        } catch (err) {
+          alert(err);
+          return false;
+        }
+      };
+    </script>
+    <script>
+      const getArticle = async () => {
+        try {
+          const id = document.getElementById('id').value;
+
+          const res = await axios({
+            method: 'GET',
+            url: '/api/v1/articles/' + id,
+            data: {},
+          });
+
+          console.log(res.data.data);
+          const data = res.data.data.data;
+          globalId = data._id;
+
+          document.getElementById('header').value = data.header;
+          document.getElementById('text').value = data.text;
+
+          return false;
+        } catch (err) {
+          alert(err);
+          return false;
+        }
+      };
+    </script>
+  </body>
+</html>

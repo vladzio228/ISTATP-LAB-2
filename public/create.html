@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="./kit/css/uikit.min.css" />
+    <script src="./kit/js/uikit.min.js"></script>
+    <script src="./kit/js/uikit-icons.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="uk-flex uk-flex-center">
+      <div>
+        <main class="uk-padding-large">
+          <section
+            class="uk-width-1-1 uk-grid-margin uk-first-column"
+            style="width: 500px"
+          >
+            <h2 class="uk-text-center uk-padding-large">Upload article</h2>
+            <form>
+              <div
+                class="uk-grid-small uk-child-width-1-1 uk-grid uk-grid-stack"
+                uk-grid=""
+              >
+                <div class="uk-first-column">
+                  <label
+                    ><div
+                      class="uk-form-label uk-form-label-required uk-text-center"
+                    >
+                      <h4> <b>Header of article</b></h1>
+                    </div>
+                    <input
+                      placeholder="Header"
+                      class="uk-input"
+                      type="text"
+                      required=""
+                      id="header" /></label
+                  ><label
+                  ><div
+                                 class="uk-form-label uk-form-label-required uk-text-center"
+                  >
+                    <h4> <b>Text of article</b></h1>
+                  </div>
+                  <textarea class="uk-textarea" rows="8" placeholder="Textarea" id="text"></textarea>
+                </div>
+                <div class="uk-text-center">
+                  <button
+                  type="button"
+                    class="uk-button uk-button-default"
+                    onclick="sendArticle()"
+                  >
+                    Send
+                  </button>
+                </div>
+              </div>
+            </form>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      const sendArticle = async () => {
+        try {
+          const header = document.getElementById('header').value;
+          const text = document.getElementById('text').value;
+          if (!header || !text) {
+            alert('some field is empty');
+            return false;
+          }
+          const res = await axios({
+            method: 'POST',
+            url: '/api/v1/articles/',
+            data: {
+              header,
+              text
+            },
+          })
+            .then((result) => {
+              console.log(result);
+              alert('success');
+            })
+            .catch((e) => alert('Bad values'));
+          return false;
+        } catch (err) {
+          alert(err);
+          return false;
+        }
+      };
+    </script>
+  </body>
+</html>
